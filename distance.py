@@ -44,5 +44,5 @@ class Distance(object):
 
 if __name__ == '__main__':
     builder = Distance()
-    builder.load_points(r'./data/iris.data')
-    builder.build_distance_file(r'./data/iris.forcluster')
+    builder.load_points(r'./data/test.data')
+    builder.build_distance_file(r'./data/test.forcluster')
