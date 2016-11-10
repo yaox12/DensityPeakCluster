@@ -1,6 +1,8 @@
 # DensityPeakCluster
 
-A implementation for 'Clustering by fast search and find of density peaks' in science 2014.  
+A python implementation for 'Clustering by fast search and find of density peaks' in science 2014.  
+
+Python version: 3.5
 
 ## Usage
 0. The input file should be distance metrix beteen points. If you have data of points vector, `distance.py` may be helpful.
