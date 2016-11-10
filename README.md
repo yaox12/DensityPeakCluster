@@ -2,7 +2,7 @@
 
 A implementation for 'Clustering by fast search and find of density peaks' in science 2014.  
 
-## Userage
+## Usage
 0. The input file should be distance metrix beteen points. If you have data of points vector, `distance.py` may be helpful.
 1. run `python plot.py input_filename` and you will get the decison graph (of rho and delta).
 2. Close (save it if you want) the graph and input the density_threshold(rho) and distance_threshold(delta) according to the decision graph, two float numbers separated by a blank space.
