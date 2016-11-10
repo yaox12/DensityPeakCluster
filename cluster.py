@@ -94,6 +94,16 @@ def min_distance(distance, num, max_dis, rho):
 
 class DensityPeakCluster(object):
 
+    def __init__(self):
+        self.distance = None
+        self.rho = None
+        self.delta = None
+        self.nearest_neighbor = None
+        self.num = None
+        self.dc = None
+        self.core = None
+
+
     def density_and_distance(self, distance_file, dc = None):
         distance, num, max_dis, min_dis = load_data(distance_file)
         if dc == None:
@@ -101,12 +111,27 @@ class DensityPeakCluster(object):
         rho = local_density(distance, num, dc)
         delta, nearest_neighbor = min_distance(distance, num, max_dis, rho)
         
-        return distance, rho, delta, nearest_neighbor, num, dc
+        self.distance = distance
+        self.rho = rho
+        self.delta = delta
+        self.nearest_neighbor = nearest_neighbor
+        self.num = num
+        self.dc = dc
 
-    def cluster(self, distance_file, density_threshold, distance_threshold, dc = None):
-        distance, rho, delta, nearest_neighbor, num, dc  = self.density_and_distance(distance_file, dc = dc)
+        return rho, delta
 
-        print('Find the center.\n')
+    def cluster(self, density_threshold, distance_threshold, dc = None):
+        if self.distance == None:
+            print('Please run density_and_distance first.')
+            exit(0)
+        distance = self.distance
+        rho = self.rho
+        delta = self.delta
+        nearest_neighbor = self.nearest_neighbor
+        num = self.num
+        dc = self.dc
+
+        print('Find the center.')
         cluster = [-1] * (num + 1)
         center = []
         for i in range(1, num + 1):
@@ -114,7 +139,7 @@ class DensityPeakCluster(object):
                 center.append(i)
                 cluster[i] = i
         
-        print('Assignation begings.\n')
+        print('Assignation begings.')
         #assignation
         sorted_rho_idx = np.argsort(-rho)
         for i in range(num):
@@ -123,7 +148,7 @@ class DensityPeakCluster(object):
                 continue
             cluster[idx] = cluster[nearest_neighbor[idx]]
 
-        print('Halo and core.\n')
+        print('Halo and core.')
         '''
         halo: points belong to halo of a cluster
         core: points belong to core of a cluster, -1 otherwise
@@ -163,4 +188,5 @@ class DensityPeakCluster(object):
 
 if __name__ == '__main__':
     dpcluster = DensityPeakCluster()
-    dpcluster.cluster(r'./data/example_distances.data', 20, 0.1)
+    dpcluster.density_and_distance(r'./data/example_distances.data')
+    dpcluster.cluster(20, 0.1)

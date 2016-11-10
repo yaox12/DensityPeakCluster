@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from cluster import *
@@ -26,6 +27,7 @@ def plot_scatter_diagram(which_fig, x, y, x_label = 'x', y_label = 'y', title = 
         plt.plot(x, y, styles[0])
     else:
         clses = set(cluster)
+        print(clses)
         xs, ys = {}, {}
         for i in range(len(x)):
             try:
@@ -45,7 +47,6 @@ def plot_scatter_diagram(which_fig, x, y, x_label = 'x', y_label = 'y', title = 
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.ylim(bottom = 0)
     plt.show()
 
 
@@ -74,11 +75,11 @@ def plot_cluster(dpcluster):
         cls.append(dpcluster.core[i])
     cls.append(dpcluster.core[dpcluster.num])
     cls = np.array(cls, dtype = np.float32)
-    '''
+
     with open(r'./dpcluster.txt', 'w') as outfile:
         outfile.write('\n'.join(list(map(str, cls))))
         outfile.close()
-    '''
+
     seed = np.random.RandomState(seed=3)
     mds = manifold.MDS(max_iter=200, eps=1e-4, n_init=1, dissimilarity="precomputed")
     dp_mds = mds.fit_transform(dp)
@@ -93,9 +94,19 @@ if __name__ == '__main__':
     cls = np.array([1, 4, 2, 3, 5, -1, -1, 6, 6, 6])
     plot_scatter_diagram(0, x, y, cluster = cls)
     '''
+    if len(sys.argv) == 1:
+        input_file = r'./data/example_distances.data'
+    else:
+        input_file = sys.argv[1]
     dpcluster = DensityPeakCluster()
-    # distance, rho, delta, nearest_neighbor, num, dc = dpcluster.density_and_distance(r'./data/example_distances.data')
-    # plot_rho_delta(rho, delta)
-    dpcluster.cluster(r'./data/example_distances.data', 20, 0.15)
+    rho, delta = dpcluster.density_and_distance(input_file)
+    print('Close the graph.\nEnter the density_threshold(rho) and distance_threshold(delta) according to the decision graph.\n')
+    plot_rho_delta(rho, delta)
+
+    density_threshold, distance_threshold = 20, 0.15 #threshold I choose for example_distance.data
+    line = input('Input the parameter: ')
+    line = line.strip().split(' ')
+    density_threshold, distance_threshold = float(line[0]), float(line[1])
+    dpcluster.cluster(density_threshold, distance_threshold)
     plot_cluster(dpcluster)
     
