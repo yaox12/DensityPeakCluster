@@ -13,4 +13,5 @@ Python version: 3.5
 4. A graph of cluster result will be plotted meanwhile.
 
 ## Reference
+- jasonwbw's github repo, [DensityPeakCluster](https://github.com/jasonwbw/DensityPeakCluster)
 - [Clustering by fast search and find of density peaks](http://www.sciencemag.org/content/344/6191/1492.full)
